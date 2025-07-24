@@ -26,7 +26,7 @@ export const QuestionCard = ({
   onStartQuiz,
 }: QuestionCardProps) => {
   return (
-    <div className="h-full bg-white rounded-xl p-8 shadow-md border border-gray-200 flex flex-col justify-center">
+    <div className="h-full bg-white rounded-xl p-4 sm:p-6 md:p-8 shadow-md border border-gray-200 flex flex-col justify-center overflow-y-auto">
       {isQuizStarted ? (
         <>
           {question.type === "quiz" && (
@@ -49,9 +49,9 @@ export const QuestionCard = ({
         </>
       ) : (
         <div className="text-center">
-          <div className="w-20 h-20 bg-gradient-to-br from-red-500 to-red-600 rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg animate-pulse-slow">
+          <div className="w-16 h-16 sm:w-20 sm:h-20 bg-gradient-to-br from-red-500 to-red-600 rounded-full flex items-center justify-center mx-auto mb-4 sm:mb-6 shadow-lg animate-pulse-slow">
             <svg
-              className="w-10 h-10 text-white"
+              className="w-8 h-8 sm:w-10 sm:h-10 text-white"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -64,15 +64,15 @@ export const QuestionCard = ({
               />
             </svg>
           </div>
-          <h2 className="text-3xl font-semibold text-gray-800 mb-4">
+          <h2 className="text-xl sm:text-2xl md:text-3xl font-semibold text-gray-800 mb-2 sm:mb-4">
             Question {currentQuestionIndex + 1}
           </h2>
-          <p className="text-lg text-gray-600 mb-8">
+          <p className="text-base sm:text-lg text-gray-600 mb-4 sm:mb-8">
             Ready to test your knowledge?
           </p>
           <button
             onClick={onStartQuiz}
-            className="bg-gradient-to-r from-red-500 to-red-600 text-white px-6 py-3 rounded-lg font-medium hover:from-red-600 hover:to-red-700 transition-all duration-200 hover:scale-105 shadow-lg border border-red-300"
+            className="bg-gradient-to-r from-red-500 to-red-600 text-white px-4 sm:px-6 py-2 sm:py-3 rounded-lg font-medium hover:from-red-600 hover:to-red-700 transition-all duration-200 hover:scale-105 shadow-lg border border-red-300"
           >
             Start Quiz →
           </button>

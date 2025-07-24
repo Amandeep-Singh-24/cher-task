@@ -1,7 +1,7 @@
 "use client";
 
 import { useParams, useRouter } from "next/navigation";
-import { useCallback } from "react";
+import { useCallback, useState, useEffect } from "react";
 import { CoinCounter } from "@/components/ui/CoinCounter";
 import { ProgressBar } from "@/components/ui/ProgressBar";
 import { ResetButton } from "@/components/ui/ResetButton";
@@ -33,6 +33,21 @@ export default function LessonPage() {
     handlePrevQuestion,
     handleReset,
   } = useLessonProgress(lessonId, currentLesson?.questions.length || 0);
+
+  // Add state for mobile view toggle
+  const [mobileShowQuestion, setMobileShowQuestion] = useState(false);
+
+  // Listen for toggle events from the SideBySideCards component
+  useEffect(() => {
+    const handleToggle = () => {
+      setMobileShowQuestion((prev) => !prev);
+    };
+
+    document.addEventListener("toggle-card-view", handleToggle);
+    return () => {
+      document.removeEventListener("toggle-card-view", handleToggle);
+    };
+  }, []);
 
   // Navigation functions defined outside of render
   const handleNextLesson = useCallback(() => {
@@ -72,15 +87,15 @@ export default function LessonPage() {
         className="absolute top-0 left-0 right-0 bg-transparent"
         style={{ zIndex: 10 }}
       >
-        <div className="max-w-7xl mx-auto px-6 lg:px-8">
-          <div className="flex justify-between items-center h-20">
-            <div className="flex items-center gap-4">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex justify-between items-center h-16 sm:h-20">
+            <div className="flex items-center gap-2 sm:gap-4">
               <button
                 onClick={handleBackToOverview}
-                className="flex items-center gap-2 text-gray-600 hover:text-gray-900 transition-colors font-medium"
+                className="flex items-center gap-1 sm:gap-2 text-gray-600 hover:text-gray-900 transition-colors font-medium"
               >
                 <svg
-                  className="w-5 h-5"
+                  className="w-4 h-4 sm:w-5 sm:h-5"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -92,7 +107,7 @@ export default function LessonPage() {
                     d="M15 19l-7-7 7-7"
                   />
                 </svg>
-                Nest Navigate
+                <span className="text-sm sm:text-base">Nest Navigate</span>
               </button>
             </div>
             <CoinCounter coins={coins} isHydrated={isHydrated} />
@@ -103,7 +118,7 @@ export default function LessonPage() {
       {/* Main Content */}
       <main className="h-screen flex flex-col">
         {/* Header Section */}
-        <div className="pt-28 pb-8 px-4 sm:px-6 lg:px-8">
+        <div className="pt-20 sm:pt-28 pb-4 sm:pb-8 px-4 sm:px-6 lg:px-8">
           <div className="max-w-4xl mx-auto">
             <ProgressBar
               current={currentQuestionIndex + 1}
@@ -112,16 +127,18 @@ export default function LessonPage() {
             />
 
             {/* Lesson Header */}
-            <div className="text-center mb-6">
-              <h1 className="text-3xl font-normal text-black mb-2 leading-tight">
+            <div className="text-center mb-4 sm:mb-6">
+              <h1 className="text-xl sm:text-2xl md:text-3xl font-normal text-black mb-2 leading-tight">
                 {currentLesson.title}
               </h1>
-              <div className="flex justify-center items-center gap-4 text-sm text-gray-600">
+              <div className="flex flex-wrap justify-center items-center gap-2 sm:gap-4 text-xs sm:text-sm text-gray-600">
                 <span>Lesson {lessonId} of 3</span>
-                <span>•</span>
+                <span className="hidden sm:inline">•</span>
                 <div className="flex items-center gap-1">
-                  <div className="w-4 h-4 bg-gradient-to-br from-red-500 to-red-600 rounded-full flex items-center justify-center">
-                    <span className="text-white font-bold text-xs">₿</span>
+                  <div className="w-3 h-3 sm:w-4 sm:h-4 bg-gradient-to-br from-red-500 to-red-600 rounded-full flex items-center justify-center">
+                    <span className="text-white font-bold text-[8px] sm:text-xs">
+                      ₿
+                    </span>
                   </div>
                   <span>10 coins per question</span>
                 </div>
@@ -135,7 +152,7 @@ export default function LessonPage() {
           <div className="max-w-7xl mx-auto h-full">
             <div className="h-full max-h-[500px]">
               <SideBySideCards
-                showQuestion={isFlipped}
+                showQuestion={isFlipped || mobileShowQuestion}
                 studyContent={
                   <StudyMaterialCard
                     content={
@@ -156,6 +173,16 @@ export default function LessonPage() {
                 }
               />
             </div>
+          </div>
+        </div>
+
+        {/* Mobile indicator for which view is active */}
+        <div className="lg:hidden text-center text-sm text-gray-500 -mt-4 mb-6 pb-4">
+          <div className="bg-white/80 backdrop-blur-sm py-2 px-4 rounded-lg inline-block">
+            {mobileShowQuestion ? "Question View" : "Study Material View"}
+            <span className="ml-2 text-xs">
+              (Tap button in bottom right to switch)
+            </span>
           </div>
         </div>
 

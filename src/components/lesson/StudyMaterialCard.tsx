@@ -4,11 +4,11 @@ interface StudyMaterialCardProps {
 
 export const StudyMaterialCard = ({ content }: StudyMaterialCardProps) => {
   return (
-    <div className="h-full bg-white/10 backdrop-blur-sm rounded-xl p-8 shadow-sm border border-gray-200 flex flex-col justify-center">
-      <div className="text-center mb-6">
-        <div className="w-16 h-16 bg-gradient-to-br from-red-500 to-red-600 rounded-full flex items-center justify-center mx-auto mb-4">
+    <div className="h-full bg-white/10 backdrop-blur-sm rounded-xl p-4 sm:p-6 md:p-8 shadow-sm border border-gray-200 flex flex-col justify-center overflow-y-auto">
+      <div className="text-center mb-4 sm:mb-6">
+        <div className="w-12 h-12 sm:w-16 sm:h-16 bg-gradient-to-br from-red-500 to-red-600 rounded-full flex items-center justify-center mx-auto mb-3 sm:mb-4">
           <svg
-            className="w-8 h-8 text-white"
+            className="w-6 h-6 sm:w-8 sm:h-8 text-white"
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
@@ -21,7 +21,7 @@ export const StudyMaterialCard = ({ content }: StudyMaterialCardProps) => {
             />
           </svg>
         </div>
-        <h2 className="text-2xl font-medium text-gray-800 mb-4">
+        <h2 className="text-xl sm:text-2xl font-medium text-gray-800 mb-3 sm:mb-4">
           Study Material
         </h2>
       </div>
@@ -29,7 +29,7 @@ export const StudyMaterialCard = ({ content }: StudyMaterialCardProps) => {
         {content.split("\n\n").map((paragraph, index) => (
           <p
             key={index}
-            className="text-gray-700 mb-4 leading-relaxed text-lg"
+            className="text-gray-700 mb-3 sm:mb-4 leading-relaxed text-base sm:text-lg"
             dangerouslySetInnerHTML={{ __html: paragraph }}
           />
         ))}
