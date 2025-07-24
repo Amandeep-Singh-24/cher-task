@@ -3,10 +3,12 @@
 import { useParams, useRouter } from "next/navigation";
 import { CoinCounter } from "@/components/ui/CoinCounter";
 import { ProgressBar } from "@/components/ui/ProgressBar";
+import { ResetButton } from "@/components/ui/ResetButton";
 import { SideBySideCards } from "@/components/lesson/SideBySideCards";
 import { StudyMaterialCard } from "@/components/lesson/StudyMaterialCard";
 import { QuestionCard } from "@/components/lesson/QuestionCard";
 import { NavigationFooter } from "@/components/lesson/NavigationFooter";
+import { CompletionModal } from "@/components/lesson/CompletionModal";
 import { lessonData } from "@/data/lessonData";
 import { useLessonProgress } from "@/hooks/useLessonProgress";
 
@@ -22,10 +24,13 @@ export default function LessonPage() {
     isFlipped,
     answeredQuestions,
     showCompletion,
+    coinsEarnedThisLesson,
+    isHydrated,
     handleQuestionAnswer,
     handleFlipCard,
     handleNextQuestion,
     handlePrevQuestion,
+    handleReset,
   } = useLessonProgress(lessonId, currentLesson?.questions.length || 0);
 
   const handleNextLesson = () => {
@@ -88,7 +93,7 @@ export default function LessonPage() {
                 Nest Navigate
               </button>
             </div>
-            <CoinCounter coins={coins} />
+            <CoinCounter coins={coins} isHydrated={isHydrated} />
           </div>
         </div>
       </header>
@@ -132,9 +137,10 @@ export default function LessonPage() {
                 onShowQuestion={handleFlipCard}
                 studyContent={
                   <StudyMaterialCard
-                    content={currentLesson.content}
-                    isQuizStarted={isFlipped}
-                    onStartQuiz={handleFlipCard}
+                    content={
+                      currentLesson.questions[currentQuestionIndex]
+                        ?.studyContent || currentLesson.content
+                    }
                   />
                 }
                 questionContent={
@@ -144,6 +150,7 @@ export default function LessonPage() {
                     isQuizStarted={isFlipped}
                     isAnswered={answeredQuestions[currentQuestionIndex]}
                     onAnswer={handleQuestionAnswer}
+                    onStartQuiz={handleFlipCard}
                   />
                 }
               />
@@ -155,7 +162,7 @@ export default function LessonPage() {
           currentQuestionIndex={currentQuestionIndex}
           totalQuestions={currentLesson.questions.length}
           answeredQuestions={answeredQuestions}
-          showCompletion={showCompletion}
+          showCompletion={false}
           onPrevious={handlePrevQuestion}
           onNext={handleNextQuestion}
           onBackToOverview={handleBackToOverview}
@@ -163,6 +170,16 @@ export default function LessonPage() {
           lessonId={lessonId}
         />
       </main>
+
+      <CompletionModal
+        isVisible={showCompletion}
+        lessonId={lessonId}
+        coinsEarned={coinsEarnedThisLesson}
+        onBackToOverview={handleBackToOverview}
+        onNextLesson={handleNextLesson}
+      />
+
+      <ResetButton onReset={handleReset} />
     </div>
   );
 }

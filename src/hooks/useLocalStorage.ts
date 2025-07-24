@@ -1,18 +1,22 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 
 export function useLocalStorage<T>(key: string, initialValue: T) {
-  const [storedValue, setStoredValue] = useState<T>(() => {
-    if (typeof window === "undefined") {
-      return initialValue;
+  const [storedValue, setStoredValue] = useState<T>(initialValue);
+  const [isHydrated, setIsHydrated] = useState(false);
+  const initialValueRef = useRef(initialValue);
+
+  useEffect(() => {
+    if (typeof window !== "undefined" && !isHydrated) {
+      try {
+        const item = window.localStorage.getItem(key);
+        const value = item ? JSON.parse(item) : initialValueRef.current;
+        setStoredValue(value);
+      } catch (error) {
+        console.error(`Error reading localStorage key "${key}":`, error);
+      }
+      setIsHydrated(true);
     }
-    try {
-      const item = window.localStorage.getItem(key);
-      return item ? JSON.parse(item) : initialValue;
-    } catch (error) {
-      console.error(`Error reading localStorage key "${key}":`, error);
-      return initialValue;
-    }
-  });
+  }, [key, isHydrated]);
 
   const setValue = (value: T | ((val: T) => T)) => {
     try {
@@ -26,5 +30,5 @@ export function useLocalStorage<T>(key: string, initialValue: T) {
     }
   };
 
-  return [storedValue, setValue] as const;
+  return [storedValue, setValue, isHydrated] as const;
 }

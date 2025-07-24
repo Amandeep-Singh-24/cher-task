@@ -15,18 +15,30 @@ export const TrueFalseQuestion = ({
 }: TrueFalseQuestionProps) => {
   const [selectedAnswer, setSelectedAnswer] = useState<boolean | null>(null);
   const [answered, setAnswered] = useState(isAnswered);
+  const [showWrongFeedback, setShowWrongFeedback] = useState(false);
 
   const handleAnswerSelect = (answer: boolean) => {
     if (answered) return;
     setSelectedAnswer(answer);
+    setShowWrongFeedback(false);
   };
 
   const handleSubmit = () => {
     if (selectedAnswer === null) return;
 
     const isCorrect = selectedAnswer === correctAnswer;
-    setAnswered(true);
-    onAnswer(isCorrect);
+    if (isCorrect) {
+      setAnswered(true);
+      onAnswer(isCorrect);
+    } else {
+      setShowWrongFeedback(true);
+      // Don't auto-reset, let user try again manually
+    }
+  };
+
+  const handleTryAgain = () => {
+    setSelectedAnswer(null);
+    setShowWrongFeedback(false);
   };
 
   return (
@@ -70,13 +82,29 @@ export const TrueFalseQuestion = ({
           False
         </button>
       </div>
-      {!answered && selectedAnswer !== null && (
+      {!answered && !showWrongFeedback && selectedAnswer !== null && (
         <button
           onClick={handleSubmit}
           className="w-full bg-gradient-to-r from-red-500 to-red-600 text-white py-3 px-6 rounded-lg font-medium hover:from-red-600 hover:to-red-700 transition-all duration-200 hover:scale-105 shadow-lg"
         >
           Submit Answer
         </button>
+      )}
+      {showWrongFeedback && (
+        <div className="text-center animate-fade-in">
+          <div className="text-lg font-semibold text-red-600 mb-4">
+            ❌ Incorrect! Please try again.
+          </div>
+          <p className="text-gray-600 mb-4">
+            Review the study material and select a different answer.
+          </p>
+          <button
+            onClick={handleTryAgain}
+            className="bg-gradient-to-r from-red-500 to-red-600 text-white py-2 px-6 rounded-lg font-medium hover:from-red-600 hover:to-red-700 transition-colors"
+          >
+            Try Again
+          </button>
+        </div>
       )}
       {answered && (
         <div className="text-center animate-fade-in">

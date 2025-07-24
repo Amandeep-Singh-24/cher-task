@@ -1,10 +1,8 @@
 interface StudyMaterialCardProps {
   content: string;
-  isQuizStarted: boolean;
-  onStartQuiz: () => void;
 }
 
-export const StudyMaterialCard = ({ content, isQuizStarted, onStartQuiz }: StudyMaterialCardProps) => {
+export const StudyMaterialCard = ({ content }: StudyMaterialCardProps) => {
   return (
     <div className="h-full bg-white/10 backdrop-blur-sm rounded-xl p-8 shadow-sm border border-gray-200 flex flex-col justify-center">
       <div className="text-center mb-6">
@@ -26,14 +24,6 @@ export const StudyMaterialCard = ({ content, isQuizStarted, onStartQuiz }: Study
         <h2 className="text-2xl font-medium text-gray-800 mb-4">
           Study Material
         </h2>
-        {!isQuizStarted && (
-          <button
-            onClick={onStartQuiz}
-            className="bg-gradient-to-r from-red-500 to-red-600 text-white px-6 py-3 rounded-lg font-medium hover:from-red-600 hover:to-red-700 transition-all duration-200 hover:scale-105 shadow-lg mb-6"
-          >
-            Start Quiz →
-          </button>
-        )}
       </div>
       <div className="prose max-w-none text-center">
         {content.split("\n\n").map((paragraph, index) => (

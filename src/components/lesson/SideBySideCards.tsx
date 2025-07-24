@@ -21,7 +21,7 @@ export const SideBySideCards = ({
         className={`h-full transition-all duration-500 ${
           showQuestion
             ? "opacity-100 transform translate-x-0"
-            : "opacity-0 transform translate-x-8 pointer-events-none lg:pointer-events-auto lg:opacity-30 lg:transform-none"
+            : "opacity-100 transform translate-x-0 lg:transform-none"
         }`}
       >
         {questionContent}

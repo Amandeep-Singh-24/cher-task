@@ -1,12 +1,13 @@
 "use client";
 
 import { CoinCounter } from '@/components/ui/CoinCounter';
+import { ResetButton } from '@/components/ui/ResetButton';
 import { HeroLessonCard } from '@/components/home/HeroLessonCard';
 import { SplineBackground } from '@/components/home/SplineBackground';
 import { useModuleProgress } from '@/hooks/useModuleProgress';
 
 export default function ModuleOverview() {
-  const { coins, completedLessons, lessons, handleLessonClick } = useModuleProgress();
+  const { coins, completedLessons, lessonProgress, lessons, handleLessonClick, handleReset } = useModuleProgress();
 
   return (
     <div className="min-h-screen relative">
@@ -80,7 +81,7 @@ export default function ModuleOverview() {
                     key={lesson.id}
                     className={`w-3 h-3 rounded-full transition-all duration-300 ${
                       completedLessons.includes(lesson.id)
-                        ? "bg-gradient-to-r from-red-500 to-red-600"
+                        ? "bg-green-500 shadow-lg"
                         : "bg-gray-300"
                     }`}
                   />
@@ -108,6 +109,8 @@ export default function ModuleOverview() {
                   lessonNumber={lesson.id}
                   title={lesson.title}
                   isCompleted={completedLessons.includes(lesson.id)}
+                  totalQuestions={lesson.totalQuestions}
+                  completedQuestions={lesson.completedQuestions}
                   onClick={() => handleLessonClick(lesson.id)}
                 />
               </div>
@@ -115,6 +118,8 @@ export default function ModuleOverview() {
           </div>
         </div>
       </section>
+
+      <ResetButton onReset={handleReset} />
     </div>
   );
 }
