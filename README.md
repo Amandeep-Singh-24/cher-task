@@ -23,7 +23,6 @@ The platform consists of three comprehensive lessons about home inspection funda
 ```bash
 # Clone the repository
 git clone https://github.com/yourusername/nest-navigate.git
-cd nest-navigate
 
 # Install dependencies
 npm install
