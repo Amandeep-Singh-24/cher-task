@@ -23,7 +23,7 @@ export const SplineBackground = () => {
     }
   };
 
-  const handleSplineError = (error: any) => {
+  const handleSplineError = (error: Error | unknown) => {
     try {
       console.error("Spline loading error:", error);
       setHasError(true);

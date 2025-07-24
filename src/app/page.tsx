@@ -74,7 +74,7 @@ export default function ModuleOverview() {
               </span>
             </h1>
             <p className="text-lg text-gray-700 font-normal leading-relaxed mb-6">
-              Whether you're a first-time buyer or experienced homeowner, master the fundamentals of home inspection through interactive lessons and earn rewards along the way.
+              Whether you&apos;re a first-time buyer or experienced homeowner, master the fundamentals of home inspection through interactive lessons and earn rewards along the way.
             </p>
             <p className="text-base text-gray-600 font-normal leading-relaxed mb-8">
               Navigate the complex world of home ownership with confidence and knowledge.

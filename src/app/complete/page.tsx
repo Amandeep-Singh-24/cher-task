@@ -55,7 +55,7 @@ export default function CompletePage() {
         </h1>
 
         <p className="text-xl text-gray-700 mb-8">
-          You've successfully completed all lessons in the Home Inspection module!
+          You&apos;ve successfully completed all lessons in the Home Inspection module!
         </p>
 
         <div className="bg-gradient-to-r from-red-50 to-red-100 rounded-lg p-6 mb-8">
@@ -68,7 +68,7 @@ export default function CompletePage() {
             </span>
           </div>
           <p className="text-gray-700">
-            You've mastered the fundamentals of home inspection!
+            You&apos;ve mastered the fundamentals of home inspection!
           </p>
         </div>
 

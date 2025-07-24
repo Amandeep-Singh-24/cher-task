@@ -136,7 +136,6 @@ export default function LessonPage() {
             <div className="h-full max-h-[500px]">
               <SideBySideCards
                 showQuestion={isFlipped}
-                onShowQuestion={handleFlipCard}
                 studyContent={
                   <StudyMaterialCard
                     content={

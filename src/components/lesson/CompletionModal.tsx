@@ -43,7 +43,7 @@ export const CompletionModal = ({
           </h2>
           
           <p className="text-gray-600 mb-6">
-            Great job! You've successfully completed Lesson {lessonId}.
+            Great job! You&apos;ve successfully completed Lesson {lessonId}.
           </p>
           
           <div className="bg-gradient-to-r from-red-50 to-red-100 rounded-lg p-4 mb-6">

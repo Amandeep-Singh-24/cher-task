@@ -2,14 +2,13 @@ interface SideBySideCardsProps {
   studyContent: React.ReactNode;
   questionContent: React.ReactNode;
   showQuestion: boolean;
-  onShowQuestion: () => void;
+  // Removed unused prop: onShowQuestion
 }
 
 export const SideBySideCards = ({
   studyContent,
   questionContent,
   showQuestion,
-  onShowQuestion,
 }: SideBySideCardsProps) => {
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 h-full">

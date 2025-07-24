@@ -11,7 +11,8 @@ export function useLessonProgress(lessonId: number, totalQuestions: number) {
   // Persistent state (synced with localStorage)
   const [coins, setCoins, isCoinsHydrated] = useLocalStorage('nestNavigateCoins', 0);
   const [completedLessons, setCompletedLessons, isLessonsHydrated] = useLocalStorage<number[]>('nestNavigateCompletedLessons', []);
-  const [lessonProgress, setLessonProgress] = useLocalStorage<Record<number, number>>('nestNavigateLessonProgress', {});
+  // Using only the setter from this hook since we need to update but don't read directly
+  const [, setLessonProgress] = useLocalStorage<Record<number, number>>('nestNavigateLessonProgress', {});
   
   // Local state (not persisted)
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
