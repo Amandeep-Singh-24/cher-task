@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 
 interface TrueFalseQuestionProps {
   question: string;
@@ -7,6 +7,11 @@ interface TrueFalseQuestionProps {
   isAnswered: boolean;
 }
 
+/**
+ * True/False question component
+ * 
+ * Handles selection, validation, and feedback for boolean questions
+ */
 export const TrueFalseQuestion = ({
   question,
   correctAnswer,
@@ -17,29 +22,32 @@ export const TrueFalseQuestion = ({
   const [answered, setAnswered] = useState(isAnswered);
   const [showWrongFeedback, setShowWrongFeedback] = useState(false);
 
-  const handleAnswerSelect = (answer: boolean) => {
+  // Handle when user selects true or false
+  const handleAnswerSelect = useCallback((answer: boolean) => {
     if (answered) return;
     setSelectedAnswer(answer);
     setShowWrongFeedback(false);
-  };
+  }, [answered]);
 
-  const handleSubmit = () => {
+  // Handle when user submits their answer
+  const handleSubmit = useCallback(() => {
     if (selectedAnswer === null) return;
 
     const isCorrect = selectedAnswer === correctAnswer;
     if (isCorrect) {
       setAnswered(true);
-      onAnswer(isCorrect);
+      onAnswer(isCorrect); // Notify parent component of correct answer
     } else {
       setShowWrongFeedback(true);
-      // Don't auto-reset, let user try again manually
+      // Let user try again manually instead of auto-resetting
     }
-  };
+  }, [selectedAnswer, correctAnswer, onAnswer]);
 
-  const handleTryAgain = () => {
+  // Reset the question state for another attempt
+  const handleTryAgain = useCallback(() => {
     setSelectedAnswer(null);
     setShowWrongFeedback(false);
-  };
+  }, []);
 
   return (
     <div className="text-center">

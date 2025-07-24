@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 
 interface QuizQuestionProps {
   question: string;
@@ -8,6 +8,11 @@ interface QuizQuestionProps {
   isAnswered: boolean;
 }
 
+/**
+ * Multiple choice question component
+ * 
+ * Handles selection, validation, and feedback for quiz questions
+ */
 export const QuizQuestion = ({
   question,
   options,
@@ -19,29 +24,32 @@ export const QuizQuestion = ({
   const [answered, setAnswered] = useState(isAnswered);
   const [showWrongFeedback, setShowWrongFeedback] = useState(false);
 
-  const handleAnswerSelect = (index: number) => {
+  // Handle when user selects an answer option
+  const handleAnswerSelect = useCallback((index: number) => {
     if (answered) return;
     setSelectedAnswer(index);
     setShowWrongFeedback(false);
-  };
+  }, [answered]);
 
-  const handleSubmit = () => {
+  // Handle when user submits their answer
+  const handleSubmit = useCallback(() => {
     if (selectedAnswer === null) return;
 
     const isCorrect = selectedAnswer === correctAnswer;
     if (isCorrect) {
       setAnswered(true);
-      onAnswer(isCorrect);
+      onAnswer(isCorrect); // Notify parent component of correct answer
     } else {
       setShowWrongFeedback(true);
-      // Don't auto-reset, let user try again manually
+      // Let user try again manually instead of auto-resetting
     }
-  };
+  }, [selectedAnswer, correctAnswer, onAnswer]);
 
-  const handleTryAgain = () => {
+  // Reset the question state for another attempt
+  const handleTryAgain = useCallback(() => {
     setSelectedAnswer(null);
     setShowWrongFeedback(false);
-  };
+  }, []);
 
   return (
     <div className="text-center">

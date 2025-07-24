@@ -1,10 +1,19 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useLocalStorage } from './useLocalStorage';
 
+/**
+ * Custom hook to manage lesson progress state and interactions
+ * 
+ * Handles question navigation, answer tracking, completion state,
+ * and synchronizes with localStorage for persistence
+ */
 export function useLessonProgress(lessonId: number, totalQuestions: number) {
+  // Persistent state (synced with localStorage)
   const [coins, setCoins, isCoinsHydrated] = useLocalStorage('nestNavigateCoins', 0);
   const [completedLessons, setCompletedLessons, isLessonsHydrated] = useLocalStorage<number[]>('nestNavigateCompletedLessons', []);
   const [lessonProgress, setLessonProgress] = useLocalStorage<Record<number, number>>('nestNavigateLessonProgress', {});
+  
+  // Local state (not persisted)
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [isFlipped, setIsFlipped] = useState(false);
   const [answeredQuestions, setAnsweredQuestions] = useState<boolean[]>([]);
@@ -12,13 +21,15 @@ export function useLessonProgress(lessonId: number, totalQuestions: number) {
   const [showCompletion, setShowCompletion] = useState(false);
   const [coinsEarnedThisLesson, setCoinsEarnedThisLesson] = useState(0);
 
+  // Initialize answered questions array when totalQuestions is known
   useEffect(() => {
     if (totalQuestions > 0 && answeredQuestions.length === 0) {
       setAnsweredQuestions(new Array(totalQuestions).fill(false));
     }
   }, [totalQuestions, answeredQuestions.length]);
 
-  const handleQuestionAnswer = (isCorrect: boolean) => {
+  // Handle correct/incorrect answers and update progress
+  const handleQuestionAnswer = useCallback((isCorrect: boolean) => {
     if (isCorrect) {
       const newCoins = coins + 10;
       setCoins(newCoins);
@@ -29,42 +40,46 @@ export function useLessonProgress(lessonId: number, totalQuestions: number) {
       newAnsweredQuestions[currentQuestionIndex] = true;
       setAnsweredQuestions(newAnsweredQuestions);
 
-      // Update lesson progress
+      // Update lesson progress for home screen display
       const questionsCompleted = newAnsweredQuestions.filter(Boolean).length;
       setLessonProgress(prev => ({ ...prev, [lessonId]: questionsCompleted }));
 
-      // Check if all questions are answered
+      // Check if all questions are answered to show completion modal
       if (newAnsweredQuestions.every((answered) => answered)) {
         setLessonCompleted(true);
         setShowCompletion(true);
 
-        // Save lesson completion
+        // Save lesson completion status
         if (!completedLessons.includes(lessonId)) {
           setCompletedLessons([...completedLessons, lessonId]);
         }
       }
     }
-  };
+  }, [coins, setCoins, answeredQuestions, currentQuestionIndex, lessonId, setLessonProgress, completedLessons, setCompletedLessons]);
 
-  const handleFlipCard = () => {
+  // Toggle between study material and question views
+  const handleFlipCard = useCallback(() => {
     setIsFlipped(!isFlipped);
-  };
+  }, [isFlipped]);
 
-  const handleNextQuestion = () => {
+  // Navigate to next question
+  const handleNextQuestion = useCallback(() => {
     if (currentQuestionIndex < totalQuestions - 1) {
       setCurrentQuestionIndex(currentQuestionIndex + 1);
-      setIsFlipped(false);
+      setIsFlipped(false); // Show study material for new question
     }
-  };
+  }, [currentQuestionIndex, totalQuestions]);
 
-  const handlePrevQuestion = () => {
+  // Navigate to previous question
+  const handlePrevQuestion = useCallback(() => {
     if (currentQuestionIndex > 0) {
       setCurrentQuestionIndex(currentQuestionIndex - 1);
-      setIsFlipped(false);
+      setIsFlipped(false); // Show study material for new question
     }
-  };
+  }, [currentQuestionIndex]);
 
-  const handleReset = () => {
+  // Reset all progress (used by reset button)
+  const handleReset = useCallback(() => {
     // Reset localStorage values
     setCoins(0);
     setCompletedLessons([]);
@@ -77,7 +92,7 @@ export function useLessonProgress(lessonId: number, totalQuestions: number) {
     setLessonCompleted(false);
     setShowCompletion(false);
     setCoinsEarnedThisLesson(0);
-  };
+  }, [setCoins, setCompletedLessons, setLessonProgress, totalQuestions]);
 
   return {
     coins,

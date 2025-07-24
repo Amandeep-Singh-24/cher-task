@@ -6,8 +6,16 @@ import { HeroLessonCard } from '@/components/home/HeroLessonCard';
 import { SplineBackground } from '@/components/home/SplineBackground';
 import { useModuleProgress } from '@/hooks/useModuleProgress';
 
+/**
+ * Home page / Module Overview
+ * 
+ * Displays all available lessons with their progress status
+ * and provides navigation to individual lessons
+ */
+
 export default function ModuleOverview() {
-  const { coins, completedLessons, lessonProgress, lessons, handleLessonClick, handleReset } = useModuleProgress();
+  // Get module data and handlers from custom hook
+  const { coins, completedLessons, lessons, handleLessonClick, handleReset } = useModuleProgress();
 
   return (
     <div className="min-h-screen relative">

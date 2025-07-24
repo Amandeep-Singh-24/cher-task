@@ -1,6 +1,7 @@
 "use client";
 
 import { useParams, useRouter } from "next/navigation";
+import { useCallback } from "react";
 import { CoinCounter } from "@/components/ui/CoinCounter";
 import { ProgressBar } from "@/components/ui/ProgressBar";
 import { ResetButton } from "@/components/ui/ResetButton";
@@ -33,17 +34,18 @@ export default function LessonPage() {
     handleReset,
   } = useLessonProgress(lessonId, currentLesson?.questions.length || 0);
 
-  const handleNextLesson = () => {
+  // Navigation functions defined outside of render
+  const handleNextLesson = useCallback(() => {
     if (lessonId < 3) {
       router.push(`/lesson/${lessonId + 1}`);
     } else {
       router.push("/complete");
     }
-  };
+  }, [lessonId, router]);
 
-  const handleBackToOverview = () => {
+  const handleBackToOverview = useCallback(() => {
     router.push("/");
-  };
+  }, [router]);
 
   if (!currentLesson) {
     return (
